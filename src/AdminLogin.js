@@ -13,7 +13,7 @@ function AdminLogin({ onLogin }) {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:8000/api/auth/login/', {
+      const response = await fetch('https://aymen88.pythonanywhere.com/api/auth/login/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -22,7 +22,7 @@ function AdminLogin({ onLogin }) {
             username,
             password,
         }),
-        credentials: 'include',  // Add this for cookies/session
+        credentials: 'include',
         });
       const data = await response.json();
 

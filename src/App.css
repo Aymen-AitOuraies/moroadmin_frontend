@@ -10,6 +10,7 @@ body {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
+
 }
 
 /* Login Page Styles */
@@ -143,7 +144,7 @@ button:disabled {
   white-space: pre-wrap; /* Preserve line breaks */
   word-wrap: break-word; /* Break long words */
   max-width: 60%; /* Ensure it doesn't overflow */
-  overflow-wrap: break-word; 
+  overflow-wrap: break-word;
 }
 
 .delete-btn {
@@ -233,4 +234,75 @@ button:disabled {
     height: 120px;
     object-fit: cover;
     border-radius: 4px;
+}
+
+
+/* Add this to your existing App.css file */
+
+/* Confirmation Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.modal-body {
+  margin-bottom: 20px;
+  color: #555;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.modal-btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.modal-btn-cancel {
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.modal-btn-cancel:hover {
+  background-color: #e0e0e0;
+}
+
+.modal-btn-confirm {
+  background-color: #f44336;
+  color: white;
+  border: none;
+}
+
+.modal-btn-confirm:hover {
+  background-color: #d32f2f;
 }
