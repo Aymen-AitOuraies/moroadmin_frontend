@@ -1,4 +1,4 @@
-/* General Styles */
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -12,7 +12,6 @@ body {
   padding: 20px;
 }
 
-/* Login Page Styles */
 .login-container {
   max-width: 400px;
   margin: 50px auto;
@@ -85,12 +84,11 @@ button:disabled {
   border-radius: 4px;
 }
 
-/* Admin Products Styles */
 .admin-products {
   padding: 15px;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center content horizontally */
+  align-items: center;
 }
 
 .logout-button {
@@ -103,9 +101,9 @@ button:disabled {
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 20px;
-  width: 100%; /* Make form responsive */
-  max-width: 600px; /* Max width for larger screens */
-  margin: 0 auto; /* Ensure it's always centered horizontally */
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
 }
 
 .image-previews {
@@ -161,13 +159,12 @@ button:disabled {
 
 .products-grid {
   display: grid;
-  /* Default to 2 columns for medium and large screens */
   grid-template-columns: repeat(2, 1fr);
   gap: 30px;
-  width: 100%; /* Make grid responsive */
-  max-width: 1200px; /* Limit the maximum width of the grid */
-  margin: 0 auto; /* Center the entire products grid */
-  justify-items: center; /* Center items within their grid cells */
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  justify-items: center;
 }
 
 .product-card {
@@ -179,8 +176,8 @@ button:disabled {
   flex-direction: column;
   justify-content: space-between;
   overflow: hidden;
-  width: 100%; /* Take full width of its grid cell */
-  max-width: 350px; /* Limit the maximum width of each card */
+  width: 100%;
+  max-width: 350px;
 }
 
 .product-image-container {
@@ -255,13 +252,12 @@ button:disabled {
   line-height: 1.5;
   color: #666;
   margin-bottom: 12px;
-  /* Removed properties for truncating description */
-  display: block; /* Changed from -webkit-box */
-  overflow: visible; /* Changed from hidden to allow full content */
+  display: block;
+  overflow: visible;
 }
 
 .description-btn {
-  background-color: #007bff; /* Example color for the description button */
+  background-color: #007bff;
   color: white;
   padding: 8px 12px;
   border: none;
@@ -334,7 +330,6 @@ button:disabled {
   background-color: #757575;
 }
 
-/* Modal Styles */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -411,7 +406,6 @@ button:disabled {
   background-color: #d32f2f;
 }
 
-/* Responsive Breakpoints */
 @media (max-width: 768px) {
   .app {
     padding: 15px;
@@ -424,7 +418,7 @@ button:disabled {
   .product-card {
     width: 100%;
     max-width: 350px;
-    margin: 0 auto; /* Center individual cards when in a single column */
+    margin: 0 auto;
   }
 
   .product-image-container {
@@ -437,8 +431,8 @@ button:disabled {
 
   .product-form {
     padding: 15px;
-    margin: 0 auto; /* Center form */
-    width: 400px; /* Adjust width to account for padding */
+    margin: 0 auto;
+    width: 400px;
   }
 
   .form-group {
@@ -491,7 +485,7 @@ button:disabled {
   .product-form {
     margin: 20px auto;
     padding: 15px;
-    width: calc(100% - 20px); /* Adjust width to account for padding */
+    width: calc(100% - 20px);
   }
 
   .product-actions {
@@ -588,7 +582,6 @@ button:disabled {
   .product-description {
     font-size: 0.8rem;
     line-height: 1.4;
-    /* Removed -webkit-line-clamp for full description */
   }
 
   .product-price {

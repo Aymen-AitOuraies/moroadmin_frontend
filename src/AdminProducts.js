@@ -18,7 +18,6 @@ function AdminProducts({ token, onLogout }) {
   const [imageColors, setImageColors] = useState({});
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
-  // New state for description modal
   const [showDescriptionModal, setShowDescriptionModal] = useState(false);
   const [currentDescription, setCurrentDescription] = useState("");
 
@@ -286,13 +285,12 @@ function AdminProducts({ token, onLogout }) {
     );
   };
 
-  // Function to open description modal
   const openDescriptionModal = (description) => {
     setCurrentDescription(description);
     setShowDescriptionModal(true);
   };
 
-  // Function to close description modal
+
   const closeDescriptionModal = () => {
     setShowDescriptionModal(false);
     setCurrentDescription("");
@@ -483,7 +481,6 @@ function AdminProducts({ token, onLogout }) {
                 </div>
                 <div className="product-info">
                   <h4>{product.title}</h4>
-                  {/* Replaced description paragraph with a button */}
                   <button
                     className="description-btn"
                     onClick={() => openDescriptionModal(product.description)}
@@ -545,8 +542,6 @@ function AdminProducts({ token, onLogout }) {
           </div>
         </div>
       )}
-
-      {/* New Description Modal */}
       {showDescriptionModal && (
         <div className="modal-overlay">
           <div className="modal-content">
