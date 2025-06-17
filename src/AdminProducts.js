@@ -1,5 +1,4 @@
-
-import React, { useState, useEffect, useCallback } from "react"; // Import useCallback
+import React, { useState, useEffect, useCallback } from "react";
 
 function AdminProducts({ token, onLogout }) {
   const [products, setProducts] = useState([]);
@@ -19,8 +18,10 @@ function AdminProducts({ token, onLogout }) {
   const [imageColors, setImageColors] = useState({});
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
+  // New state for description modal
+  const [showDescriptionModal, setShowDescriptionModal] = useState(false);
+  const [currentDescription, setCurrentDescription] = useState("");
 
-  // Wrap fetchProducts in useCallback
   const fetchProducts = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -34,7 +35,11 @@ function AdminProducts({ token, onLogout }) {
       );
       const data = await response.json();
       if (response.ok) {
-        setProducts(data);
+        const productsWithImageIndex = data.map(product => ({
+          ...product,
+          currentImageIndex: 0
+        }));
+        setProducts(productsWithImageIndex);
       } else {
         setError(data.detail || "Failed to fetch products.");
       }
@@ -44,11 +49,11 @@ function AdminProducts({ token, onLogout }) {
     } finally {
       setIsLoading(false);
     }
-  }, [token]); // Add token as a dependency for useCallback
+  }, [token]);
 
   useEffect(() => {
     fetchProducts();
-  }, [fetchProducts]); // Include fetchProducts in the dependency array
+  }, [fetchProducts]);
 
   useEffect(() => {
     return () => {
@@ -98,18 +103,14 @@ function AdminProducts({ token, onLogout }) {
     setImageColors((prev) => {
       const newColors = {};
       let newIndex = 0;
-      for (let i = 0; i < prev.length; i++) {
-        if (i !== indexToRemove) {
-          newColors[newIndex++] = prev[i];
+      const currentColorsArray = Object.entries(prev).map(([key, value]) => ({ index: parseInt(key), color: value }));
+
+      currentColorsArray.forEach((item) => {
+        if (item.index !== indexToRemove) {
+          newColors[newIndex] = item.color;
+          newIndex++;
         }
-        // Corrected logic: if there was a color for the removed index,
-        // it should be skipped in the newColors.
-        // The original code was trying to iterate over prev.length
-        // but prev might not be an array, but an object (as set by setImageColors({ [index]: color }))
-        // A safer way is to convert prev to an array of its values, filter, and then convert back to an object.
-        // However, given the current structure, directly updating the object based on indices seems to be intended.
-        // Let's ensure the indices are handled correctly for the next iteration.
-      }
+      });
       return newColors;
     });
   };
@@ -142,15 +143,29 @@ function AdminProducts({ token, onLogout }) {
       formData.append("uploaded_images", image);
     });
 
-    for (let i = 0; i < newProduct.images.length; i++) {
-      formData.append("image_colors", imageColors[i] || "");
-    }
-
     if (editingProduct) {
-      removedImageIds.forEach((id) => {
-        formData.append("removed_images", id);
+      const finalImageColorsArray = [];
+      previewImages.forEach((url, idx) => {
+        let isRemovedExistingImage = false;
+        if (!url.startsWith("blob:")) {
+          const uploadedImage = editingProduct.images.find(img => img.image === url);
+          if (uploadedImage && removedImageIds.includes(uploadedImage.id)) {
+            isRemovedExistingImage = true;
+          }
+        }
+        if (!isRemovedExistingImage) {
+          finalImageColorsArray.push(imageColors[idx] || "");
+        }
+      });
+      finalImageColorsArray.forEach(color => {
+        formData.append("image_colors", color);
+      });
+    } else {
+      newProduct.images.forEach((_, i) => {
+        formData.append("image_colors", imageColors[i] || "");
       });
     }
+
 
     const url = editingProduct
       ? `https://aymen88.pythonanywhere.com/api/products/${editingProduct.id}/`
@@ -211,6 +226,7 @@ function AdminProducts({ token, onLogout }) {
       existingImageColors[index] = img.color || "";
     });
     setImageColors(existingImageColors);
+    setRemovedImageIds([]);
   };
 
   const handleDelete = async (productId) => {
@@ -240,6 +256,48 @@ function AdminProducts({ token, onLogout }) {
       setIsLoading(false);
     }
   };
+
+  const handlePrevImage = (productId) => {
+    setProducts(prevProducts =>
+      prevProducts.map(product =>
+        product.id === productId
+          ? {
+              ...product,
+              currentImageIndex:
+                (product.currentImageIndex - 1 + product.images.length) %
+                product.images.length,
+            }
+          : product
+      )
+    );
+  };
+
+  const handleNextImage = (productId) => {
+    setProducts(prevProducts =>
+      prevProducts.map(product =>
+        product.id === productId
+          ? {
+              ...product,
+              currentImageIndex:
+                (product.currentImageIndex + 1) % product.images.length,
+            }
+          : product
+      )
+    );
+  };
+
+  // Function to open description modal
+  const openDescriptionModal = (description) => {
+    setCurrentDescription(description);
+    setShowDescriptionModal(true);
+  };
+
+  // Function to close description modal
+  const closeDescriptionModal = () => {
+    setShowDescriptionModal(false);
+    setCurrentDescription("");
+  };
+
 
   return (
     <div className="admin-products">
@@ -355,7 +413,7 @@ function AdminProducts({ token, onLogout }) {
             ))}
           </div>
         </div>
-        <button type="submit" disabled={isLoading}>
+        <button className="add-btn" type="submit" disabled={isLoading}>
           {isLoading
             ? "Saving..."
             : editingProduct
@@ -394,27 +452,44 @@ function AdminProducts({ token, onLogout }) {
           <div className="products-grid">
             {products.map((product) => (
               <div key={product.id} className="product-card">
-                <div className="product-images">
+                <div className="product-image-container">
                   {product.images && product.images.length > 0 ? (
-                    product.images.map((img, imgIndex) => (
-                      <div
-                        key={imgIndex}
-                        className="product-thumbnail-container"
-                      >
-                        <img
-                          src={img.image}
-                          alt={product.title}
-                          className="product-thumbnail"
-                        />
-                      </div>
-                    ))
+                    <>
+                      <img
+                        src={product.images[product.currentImageIndex].image}
+                        alt={`${product.title} - ${product.currentImageIndex + 1}`}
+                        className="product-thumbnail"
+                      />
+                      {product.images.length > 1 && (
+                        <>
+                          <button
+                            className="image-nav-arrow left-arrow"
+                            onClick={() => handlePrevImage(product.id)}
+                          >
+                            &#10094;
+                          </button>
+                          <button
+                            className="image-nav-arrow right-arrow"
+                            onClick={() => handleNextImage(product.id)}
+                          >
+                            &#10095;
+                          </button>
+                        </>
+                      )}
+                    </>
                   ) : (
                     <div className="no-image-placeholder">No images</div>
                   )}
                 </div>
                 <div className="product-info">
                   <h4>{product.title}</h4>
-                  <p className="product-description">{product.description}</p>
+                  {/* Replaced description paragraph with a button */}
+                  <button
+                    className="description-btn"
+                    onClick={() => openDescriptionModal(product.description)}
+                  >
+                    View Description
+                  </button>
                   <p className="product-price">${product.price}</p>
                   {product.product_type === "TSHIRT" &&
                     product.available_sizes && (
@@ -465,6 +540,26 @@ function AdminProducts({ token, onLogout }) {
                 onClick={() => handleDelete(productToDelete)}
               >
                 Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* New Description Modal */}
+      {showDescriptionModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <div className="modal-header">Product Description</div>
+            <div className="modal-body">
+              <p>{currentDescription}</p>
+            </div>
+            <div className="modal-footer">
+              <button
+                className="modal-btn modal-btn-cancel"
+                onClick={closeDescriptionModal}
+              >
+                Close
               </button>
             </div>
           </div>
