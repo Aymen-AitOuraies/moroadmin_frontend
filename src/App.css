@@ -135,18 +135,16 @@ button:disabled {
   max-height: 100px;
   margin-top: 10px;
 }
-.product-description
-{
-  font-size: 1.1rem;
-  line-height: 1.6;
+.product-description {
+  font-size: 0.9rem;
+  line-height: 1.4;
   color: #555;
-  margin-bottom: 20px;
-  white-space: pre-wrap; /* Preserve line breaks */
-  word-wrap: break-word; /* Break long words */
-  max-width: 60%; /* Ensure it doesn't overflow */
+  margin-bottom: 10px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
   overflow-wrap: break-word;
+  max-width: 100%;
 }
-
 .delete-btn {
   background-color: #f44336;
   margin-left: 10px;
@@ -320,31 +318,54 @@ button:disabled {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-}
-
-.product-images {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 10px;
+  height: 100%; /* Make cards equal height */
 }
 
 .product-info {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* Fix for text overflow in flex containers */
 }
 
-.product-actions {
+/* Ensure images don't grow too large */
+.product-images {
   display: flex;
-  gap: 10px;
-  margin-top: 15px;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 10px;
 }
 
 .product-thumbnail {
-  max-width: 100%;
-  height: auto;
+  max-width: 80px;
+  max-height: 80px;
+  object-fit: cover;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
+
+/* Add text truncation for long titles */
+.product-info h4 {
+  margin: 0 0 5px 0;
+  font-size: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .products-grid {
     grid-template-columns: 1fr;
+  }
+
+  .product-description {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .product-thumbnail {
+    max-width: 100px;
+    max-height: 100px;
   }
 }
