@@ -318,54 +318,31 @@ button:disabled {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  height: 100%; /* Make cards equal height */
+}
+
+.product-images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
 .product-info {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0; /* Fix for text overflow in flex containers */
 }
 
-/* Ensure images don't grow too large */
-.product-images {
+.product-actions {
   display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-bottom: 10px;
+  gap: 10px;
+  margin-top: 15px;
 }
 
 .product-thumbnail {
-  max-width: 80px;
-  max-height: 80px;
-  object-fit: cover;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  max-width: 100%;
+  height: auto;
 }
-
-/* Add text truncation for long titles */
-.product-info h4 {
-  margin: 0 0 5px 0;
-  font-size: 1rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .products-grid {
     grid-template-columns: 1fr;
-  }
-
-  .product-description {
-    font-size: 1rem;
-    line-height: 1.5;
-  }
-
-  .product-thumbnail {
-    max-width: 100px;
-    max-height: 100px;
   }
 }
