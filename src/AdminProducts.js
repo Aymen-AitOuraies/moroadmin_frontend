@@ -487,7 +487,7 @@ function AdminProducts({ token, onLogout }) {
                   >
                     View Description
                   </button>
-                  <p className="product-price">${product.price}</p>
+                  <p className="product-price">{product.price} DHS</p>
                   {product.product_type === "TSHIRT" &&
                     product.available_sizes && (
                       <p className="product-sizes">
